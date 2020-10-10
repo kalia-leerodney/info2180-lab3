@@ -1,206 +1,118 @@
-"use strict";
+"use strict"
 
+window.onload = function() {
 
-window.onload = function addClassName() {
-    let currentPlayer = "X";
+    var currentPlayer = "X";
     let gameState = ["", "", "", "", "", "", "", "", ""];
     let elem = document.querySelectorAll("#board div");
+    var statusDisplay = document.querySelector("#status");
+    const winnings = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+
+    
 
     for (let i=0; i < elem.length ; i++){
-        elem[i].className += "square";
-        elem[i].style.hover;
+        elem[i].classList.add("square");
         elem[i].addEventListener('click', function() {
             console.log('Square ' + i + " clicked");
-            elem[i].innerHTML = currentPlayer;
-            PlayerChange();
+            elem[i].textContent = currentPlayer;
 
-            /*if (currentPlayer == "X" || currentPlayer== "O"){
-                elem[i].removeEventListener('click', PlayerChange());
-            /*}
+            for (let m = 0; m < elem.length; m++){
+                if (this == elem[m]){
+                    gameState[i] = currentPlayer;
+                }
+            }
+
+            currentPlayer = currentPlayer === "X" ? "O":"X";
+            /*statusDisplay.innerHTML = currentPlayerTurn();*/
+
+
+            if (currentPlayer == "X"){
+                this.classList.add("X");
+                this.innerHTML = "X";
+                this.style.pointerEvents = 'none';
+                statusDisplay.textContent = "It's X's Turn";
+            }
+
+            else {
+                this.classList.add("O");
+                this.textContent = "O";
+                statusDisplay.textContent = "It's O's Turn";
+                this.style.pointerEvents = 'none';
+            }
+
+        
+
             
-            PlayerChange();
-            /*handleResult()*/;
+            if (
+                gameState[0] == currentPlayer && gameState[1] == currentPlayer && gameState[2] == currentPlayer ||
+                gameState[3] == currentPlayer && gameState[4] == currentPlayer && gameState[5] == currentPlayer ||
+                gameState[6] == currentPlayer && gameState[7] == currentPlayer && gameState[8] == currentPlayer ||
+                gameState[0] == currentPlayer && gameState[3] == currentPlayer && gameState[6] == currentPlayer ||
+                gameState[1] == currentPlayer && gameState[4] == currentPlayer && gameState[7] == currentPlayer ||
+                gameState[3] == currentPlayer && gameState[4] == currentPlayer && gameState[5] == currentPlayer ||
+                gameState[2] == currentPlayer && gameState[5] == currentPlayer && gameState[8] == currentPlayer ||
+                gameState[0] == currentPlayer && gameState[4] == currentPlayer && gameState[8] == currentPlayer ||
+                gameState[2] == currentPlayer && gameState[4] == currentPlayer && gameState[6] == currentPlayer 
+                ){
+                    statusDisplay.classList.add("you-won");
+
+                    if (currentPlayer == "X"){
+                        statusDisplay.textContent = "Congradulations O has won"
+                    }
+
+                    else if (currentPlayer =="O") {
+                        statusDisplay.textContent = "Congradulations X has won"
+                    }
+
+                    else{
+                        statusDisplay.innerHTML = "Draw";
+                    }
+  
+                
+                }
+                
+           
+
+    
         });
 
-       
-    }
-    var statusDisplay = document.querySelector("#status");
-    let gameActive = true;
-    const clickBox = elem.target;
-    const currentPlayerTurn = () => `It's ${currentPlayer}'s turn`;
-    const winningMsg = () => `Player ${currentPlayer} has won!`;
-    const drawMsg = () => `Game ended in a draw!`;
-    statusDisplay.innerHTML = currentPlayerTurn();
+        elem[i].addEventListener('mouseover', function(){
+            this.classList.add("hover");
+        });
 
-   
-    function PlayerChange() {
-        currentPlayer = currentPlayer === "X" ? "O" : "X";
-        statusDisplay.innerHTML = currentPlayerTurn();
+        elem[i].addEventListener('mouseout', function(){
+            this.classList.remove('hover');
+        })
 
-        if (statusDisplay.textContent == "X" || statusDisplay.textContent =="O"){
-            removeEventListener('click', PlayerChange());
-        }
+        let reset = document.querySelector(".btn");
+        let beginningMsg = document.querySelector("#status div");
+        reset.addEventListener("click", function(){
+            for (let r =0 ; r < elem.length; r++){
+                elem[r].classList.remove('X');
+                elem[r].classList.remove("O");
+                elem[r].textContent = "";
+                elem[r].style.pointerEvents = 'auto';
+            }
+            currentPlayer = "X";
+            statusDisplay.innerHTML = beginningMsg.getAttribute();
+            gameState = ["", "", "", "", "", "", "", "", ""];
+            statusDisplay.textContent = "Move your mouse over a square and click to place X or O";
+          
+        })
 
-
+        
+           
+    } 
     
 }
+        
 
-const winningCond = [
-    [0,1,2]
-    [3,4,5]
-    [6,7,8]
-    [0,3,6]
-    [1,4,7]
-    [2,5,8]
-    [0,4,8]
-    [2,4,6]
-];
-
-
-}
-
-function handleResult() {
-    let winner = false;
-    for (let i=0; i<=7; i++){
-        const winCond = winningCond[i];
-        let a = gameState[winCond[0]];
-        let b = gameState[winCond[1]];
-        let c = gameState[winCond[2]];
-        if(a == '' || b == '' || c == ''){
-            continue;
-        }
-        if (a === b && b ===c ){
-            winner = true;
-            break;
-        }
-
-        if (winner){
-            statusDisplay.innerHTML = winningMsg();
-            gameActive = false;
-            return;
-        }
-
-        let roundTie = !gameState.includes("");
-        if (roundDraw){
-            statusDisplay.innerHTML = drawMsg();
-            gameActive = false;
-            return;
-        }
-    }
-
-}
-
-function RestartGame(){
-    gameActive = true;
-    currentPlayer = "X";
-    gameState = ["", "", "", "", "", "", "", "", ""];
-    statusDisplay.innerHTML = currentPlayerTurn();
-    document.querySelector("#btn").addEventListener('click');
-
-    
-};
-    
-
-/*function handleResult() {
-    let winner = false;
-    for (let i=0; i<=7; i++){
-        const winCond = winningConditions[i];
-        let a = gameState[winCond[0]];
-        let b = gameState[winCond[1]];
-        let c = gameState[winCond[2]];
-        if(a == '' || b == '' || c == ''){
-            continue;
-        }
-        if (a === b && b ===c ){
-            winner = true;
-            break;
-        }
-
-        if (winner){
-            statusDisplay.innerHTML = winningMsg();
-            gameActive = false;
-            return;
-        }
-
-        let roundTie = !gameState.includes("");
-        if (roundDraw){
-            statusDisplay.innerHTML = drawMsg();
-            gameActive = false;
-            return;
-        }
-
-        PlayerChange();
-    }
+                
 
 
 
 
 
-/*const statusDisplay = document.querySelector('#status');
-let gameActive = true;
-let currentPlayer = "X";
-let gameState = ["", "", "", "", "", "", "", "", ""];
-const winningMsg = () => `Player ${currentPlayer} has won!`;
-const drawMsg = () => `Game ended in a draw!`;
-const currentPlayerTurn = () => `It's ${currentPlayer}'s turn`;
-statusDisplay.innerHTML = currentPlayerTurn();
-const winningConditions = [
-    [0,1,2]
-    [3,4,5]
-    [6,7,8]
-    [0,3,6]
-    [1,4,7]
-    [2,5,8]
-    [0,4,8]
-    [2,4,6]
-];
 
 
-/*function handleBoxPlayed(clickedBox,clickedBoxIndex) {
-    gameState[clickedBoxIndex] = currentPlayer;
-    clickedBox.innerHTML = currentPlayer;
-}
-function PlayerChange() {
-    currentPlayer = currentPlayer === "X" ? "O" : "X";
-    statusDisplay.innerHTML = currentPlayerTurn();
-}/*/
-
-/*function handleBoxClick(clickedBoxEvent) {
-    const clickedBox = clickedBoxEvent.target;
-    const clickedBoxIndex = parseInt(clickedBox.getAttribute('#board div'))
-
-
-}/*/
-
-/*function handleResult() {
-    let winner = false;
-    for (let i=0; i<=7; i++){
-        const winCond = winningConditions[i];
-        let a = gameState[winCond[0]];
-        let b = gameState[winCond[1]];
-        let c = gameState[winCond[2]];
-        if(a == '' || b == '' || c == ''){
-            continue;
-        }
-        if (a === b && b ===c ){
-            winner = true;
-            break;
-        }
-
-        if (winner){
-            statusDisplay.innerHTML = winningMsg();
-            gameActive = false;
-            return;
-        }
-
-        let roundTie = !gameState.includes("");
-        if (roundDraw){
-            statusDisplay.innerHTML = drawMsg();
-            gameActive = false;
-            return;
-        }
-
-        PlayerChange();
-    }
-    */
 
