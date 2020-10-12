@@ -30,13 +30,13 @@ window.onload = function() {
                 this.classList.add("X");
                 this.innerHTML = "X";
                 this.style.pointerEvents = 'none';
-                statusDisplay.textContent = "It's X's Turn";
+                /*statusDisplay.textContent = "It's X's Turn";*/
             }
 
             else {
                 this.classList.add("O");
                 this.textContent = "O";
-                statusDisplay.textContent = "It's O's Turn";
+                /*statusDisplay.textContent = "It's O's Turn";*/
                 this.style.pointerEvents = 'none';
             }
 
@@ -93,8 +93,7 @@ window.onload = function() {
                 elem[r].textContent = "";
                 elem[r].style.pointerEvents = 'auto';
             }
-            currentPlayer = "X";
-            statusDisplay.innerHTML = beginningMsg.getAttribute();
+            
             gameState = ["", "", "", "", "", "", "", "", ""];
             statusDisplay.textContent = "Move your mouse over a square and click to place X or O";
           
